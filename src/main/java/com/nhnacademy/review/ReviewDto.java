@@ -1,17 +1,20 @@
 package com.nhnacademy.review;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class ReviewDto {
     private Long id;
-    private Long bookId;
     private Long userId;
+    private Long bookId;
     private int rating;
-    private String reviewText;
+    private String content;
+    private LocalDateTime postedAt;
     private String photoPath;
 }
