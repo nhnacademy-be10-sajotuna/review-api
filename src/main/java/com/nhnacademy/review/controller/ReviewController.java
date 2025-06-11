@@ -2,16 +2,18 @@ package com.nhnacademy.review.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.review.domain.dto.ReviewResponse;
+
 import com.nhnacademy.review.domain.entity.Review;
+import com.nhnacademy.review.exception.IllegalVariableException;
 import com.nhnacademy.review.service.ReviewService;
 import com.nhnacademy.review.domain.dto.ReviewRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -28,18 +30,18 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createReview(@Valid @RequestBody ReviewRequest request, BindingResult bindingResult) {
+    public ResponseEntity<ReviewResponse> createReview(@Valid @RequestBody ReviewRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+            throw new IllegalVariableException(bindingResult.getFieldError().getDefaultMessage());
         }
         ReviewResponse created = reviewService.createReview(request);
         return ResponseEntity.ok(created);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateReview(@PathVariable Long id, @Valid @RequestBody ReviewRequest request, BindingResult bindingResult) {
+    public ResponseEntity<ReviewResponse> updateReview(@PathVariable Long id, @Valid @RequestBody ReviewRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+            throw new IllegalVariableException(bindingResult.getFieldError().getDefaultMessage());
         }
         ReviewResponse updated = reviewService.updateReview(id, request);
         return ResponseEntity.ok(updated);

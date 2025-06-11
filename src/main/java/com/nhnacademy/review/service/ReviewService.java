@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.review.domain.dto.ReviewRequest;
 import com.nhnacademy.review.domain.dto.ReviewResponse;
 import com.nhnacademy.review.domain.entity.Review;
+import com.nhnacademy.review.exception.ReviewNotFoundException;
 import com.nhnacademy.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,7 @@ public class ReviewService {
     @Transactional
     public ReviewResponse updateReview(Long id, ReviewRequest reviewRequest) {
         Review review = reviewRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Review not found"));
+                .orElseThrow(() -> new ReviewNotFoundException(id.toString()));
         review.setUserId(reviewRequest.getUserId());
         review.setBookId(reviewRequest.getBookId());
         review.setRating(reviewRequest.getRating());
