@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: review-service
+    name: review-api
   datasource:
     url: jdbc:mysql://s4.java21.net:13306/project_be10_team4_dev?useSSL=false&serverTimezone=UTC
     username: project_be10_team4
