@@ -1,28 +1,40 @@
 package com.nhnacademy.review;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/reviews")
+@RequestMapping("/api/reviews")
 public class ReviewController {
     private final ReviewService reviewService;
 
-    @GetMapping("/book/{bookId}")
-    public List<Review> getReviewsByBook(@PathVariable Long bookId) {
-        return reviewService.getReviewsByBookId(bookId);
+    @GetMapping("/books/{bookId}")
+    public ResponseEntity<?> getReviewsByBook(@PathVariable Long bookId) {
+        reviewService.getReviewsByBookId(bookId);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping
-    public Review createReview(@RequestBody ReviewDto reviewDto) {
-        return reviewService.createReview(reviewDto);
+    public ResponseEntity<?> createReview(@Valid @RequestBody ReviewDto reviewDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+        }
+        reviewService.createReview(reviewDto);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
-    public Review updateReview(@PathVariable Long id, @RequestBody ReviewDto reviewDto) {
-        return reviewService.updateReview(id, reviewDto);
+    public ResponseEntity<?> updateReview(@PathVariable Long id, @Valid @RequestBody ReviewDto reviewDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+        }
+        reviewService.updateReview(id, reviewDto);
+        return ResponseEntity.ok().build();
     }
 }
