@@ -1,4 +1,4 @@
-package com.nhnacademy.review;
+package com.nhnacademy.review.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
