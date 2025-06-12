@@ -1,15 +1,11 @@
 package com.nhnacademy.review.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.review.domain.dto.ReviewResponse;
-
-import com.nhnacademy.review.exception.IllegalVariableException;
-import com.nhnacademy.review.service.ReviewService;
 import com.nhnacademy.review.domain.dto.ReviewRequest;
+import com.nhnacademy.review.domain.dto.ReviewResponse;
+import com.nhnacademy.review.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +15,6 @@ import java.util.List;
 @RequestMapping("/api/reviews")
 public class ReviewController {
     private final ReviewService reviewService;
-    private final ObjectMapper objectMapper;
 
     @GetMapping("/books/{bookId}")
     public ResponseEntity<List<ReviewResponse>> getReviewsByBook(@PathVariable Long bookId) {
@@ -28,20 +23,14 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<ReviewResponse> createReview(@Valid @RequestBody ReviewRequest request, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            throw new IllegalVariableException(bindingResult.getFieldError().getDefaultMessage());
-        }
-        ReviewResponse created = reviewService.createReview(request);
+    public ResponseEntity<ReviewResponse> createReview(@Valid @RequestBody ReviewRequest request, @RequestHeader("X-User-Id")Long userId) {
+        ReviewResponse created = reviewService.createReview(request, userId);
         return ResponseEntity.ok(created);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReviewResponse> updateReview(@PathVariable Long id, @Valid @RequestBody ReviewRequest request, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            throw new IllegalVariableException(bindingResult.getFieldError().getDefaultMessage());
-        }
-        ReviewResponse updated = reviewService.updateReview(id, request);
+    public ResponseEntity<ReviewResponse> updateReview(@PathVariable Long id, @Valid @RequestBody ReviewRequest request, @RequestHeader("X-User-Id")Long userId) {
+        ReviewResponse updated = reviewService.updateReview(id, request, userId);
         return ResponseEntity.ok(updated);
     }
 }

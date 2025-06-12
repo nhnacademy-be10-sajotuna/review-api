@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.review.domain.dto.ReviewRequest;
 import com.nhnacademy.review.domain.dto.ReviewResponse;
 import com.nhnacademy.review.domain.entity.Review;
+import com.nhnacademy.review.exception.NotAuthorizedUserException;
 import com.nhnacademy.review.exception.ReviewNotFoundException;
 import com.nhnacademy.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,22 +31,21 @@ public class ReviewService {
     }
 
     @Transactional
-    public ReviewResponse createReview(ReviewRequest reviewRequest) {
+    public ReviewResponse createReview(ReviewRequest reviewRequest, Long userId) {
         Review review = objectMapper.convertValue(reviewRequest, Review.class);
+        review.setUserId(userId);
         Review savedReview = reviewRepository.save(review);
         return objectMapper.convertValue(savedReview, ReviewResponse.class);
     }
 
     @Transactional
-    public ReviewResponse updateReview(Long id, ReviewRequest reviewRequest) {
+    public ReviewResponse updateReview(Long id, ReviewRequest reviewRequest, Long userId) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException(id.toString()));
-        review.setUserId(reviewRequest.getUserId());
-        review.setBookId(reviewRequest.getBookId());
-        review.setRating(reviewRequest.getRating());
-        review.setContent(reviewRequest.getContent());
-        review.setPostedAt(reviewRequest.getPostedAt());
-        review.setPhotoPath(reviewRequest.getPhotoPath());
+        if (!review.getUserId().equals(userId)) {
+            throw new NotAuthorizedUserException(userId);
+        }
+        review.update(reviewRequest);
         return objectMapper.convertValue(review, ReviewResponse.class);
     }
 }

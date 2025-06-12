@@ -1,5 +1,6 @@
 package com.nhnacademy.review.domain.entity;
 
+import com.nhnacademy.review.domain.dto.ReviewRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,4 +37,11 @@ public class Review {
 
     @Column(name = "photo_path")
     private String photoPath;
+
+    public void update(ReviewRequest reviewRequest) {
+        this.rating = reviewRequest.getRating();
+        this.content = reviewRequest.getContent();
+        this.postedAt = reviewRequest.getPostedAt();
+        this.photoPath = reviewRequest.getPhotoPath();
+    }
 }

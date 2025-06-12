@@ -11,20 +11,17 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReviewRequest {
-    @NotNull
-    private Long userId;
-
-    @NotNull
+    @NotNull(message = "책 ID가 유효하지 않습니다.")
     private Long bookId;
 
-    @Min(1)
-    @Max(5)
+    @Min(value = 1, message = "평가 점수는 1점부터 5점까지입니다.")
+    @Max(value = 5, message = "평가 점수는 1점부터 5점까지입니다.")
     private int rating;
 
-    @NotNull
+    @NotNull(message = "내용을 입력해주세요.")
     private String content;
     
-    @NotNull
+    @NotNull(message = "등록 시간이 유효하지 않습니다.")
     private LocalDateTime postedAt;
 
     private String photoPath;
