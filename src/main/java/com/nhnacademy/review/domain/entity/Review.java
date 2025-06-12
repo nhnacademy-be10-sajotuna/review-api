@@ -19,7 +19,7 @@ public class Review {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "member_id", nullable = false)
+    @Column(name = "user_id", nullable = false)
     private Long userId;
 
     @Column(name = "book_id", nullable = false)
