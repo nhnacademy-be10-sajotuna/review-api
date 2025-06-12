@@ -3,13 +3,11 @@ package com.nhnacademy.review.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.review.domain.dto.ReviewResponse;
 
-import com.nhnacademy.review.domain.entity.Review;
 import com.nhnacademy.review.exception.IllegalVariableException;
 import com.nhnacademy.review.service.ReviewService;
 import com.nhnacademy.review.domain.dto.ReviewRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
