@@ -1,7 +1,9 @@
 package com.nhnacademy.review.domain.entity;
 
+import com.nhnacademy.review.domain.dto.ReviewUpdateRequest;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -31,9 +33,16 @@ public class Review {
     @Column(name = "content", nullable = false)
     private String content;
 
+    @CreationTimestamp
     @Column(name = "posted_at", nullable = false)
     private LocalDateTime postedAt;
 
     @Column(name = "photo_path")
     private String photoPath;
+
+    public void update(ReviewUpdateRequest reviewCreateRequest) {
+        this.rating = reviewCreateRequest.getRating();
+        this.content = reviewCreateRequest.getContent();
+        this.photoPath = reviewCreateRequest.getPhotoPath();
+    }
 }
