@@ -1,7 +1,8 @@
 package com.nhnacademy.review.controller;
 
-import com.nhnacademy.review.domain.dto.ReviewRequest;
+import com.nhnacademy.review.domain.dto.ReviewCreateRequest;
 import com.nhnacademy.review.domain.dto.ReviewResponse;
+import com.nhnacademy.review.domain.dto.ReviewUpdateRequest;
 import com.nhnacademy.review.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +24,13 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<ReviewResponse> createReview(@Valid @RequestBody ReviewRequest request, @RequestHeader("X-User-Id")Long userId) {
+    public ResponseEntity<ReviewResponse> createReview(@Valid @RequestBody ReviewCreateRequest request, @RequestHeader("X-User-Id")Long userId) {
         ReviewResponse created = reviewService.createReview(request, userId);
         return ResponseEntity.ok(created);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReviewResponse> updateReview(@PathVariable Long id, @Valid @RequestBody ReviewRequest request, @RequestHeader("X-User-Id")Long userId) {
+    public ResponseEntity<ReviewResponse> updateReview(@PathVariable Long id, @Valid @RequestBody ReviewUpdateRequest request, @RequestHeader("X-User-Id")Long userId) {
         ReviewResponse updated = reviewService.updateReview(id, request, userId);
         return ResponseEntity.ok(updated);
     }

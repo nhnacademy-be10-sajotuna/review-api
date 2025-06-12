@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReviewRequest {
+public class ReviewCreateRequest {
     @NotNull(message = "책 ID가 유효하지 않습니다.")
     private Long bookId;
 

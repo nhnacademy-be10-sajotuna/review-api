@@ -1,6 +1,6 @@
 package com.nhnacademy.review.domain.entity;
 
-import com.nhnacademy.review.domain.dto.ReviewRequest;
+import com.nhnacademy.review.domain.dto.ReviewUpdateRequest;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -40,9 +40,9 @@ public class Review {
     @Column(name = "photo_path")
     private String photoPath;
 
-    public void update(ReviewRequest reviewRequest) {
-        this.rating = reviewRequest.getRating();
-        this.content = reviewRequest.getContent();
-        this.photoPath = reviewRequest.getPhotoPath();
+    public void update(ReviewUpdateRequest reviewCreateRequest) {
+        this.rating = reviewCreateRequest.getRating();
+        this.content = reviewCreateRequest.getContent();
+        this.photoPath = reviewCreateRequest.getPhotoPath();
     }
 }
