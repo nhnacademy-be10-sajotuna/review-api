@@ -1,0 +1,13 @@
+### GET request to example server
+POST http://localhost:10368/api/reviews
+Accept: application/json
+Content-Type: application/json
+X-User-Id: 22
+
+{
+  "bookId": 1,
+  "content": "hello",
+  "rating": 3
+}
+
+###

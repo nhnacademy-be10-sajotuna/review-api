@@ -3,9 +3,9 @@ package com.nhnacademy.review.domain.dto;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
-
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
@@ -20,9 +20,6 @@ public class ReviewRequest {
 
     @NotNull(message = "내용을 입력해주세요.")
     private String content;
-    
-    @NotNull(message = "등록 시간이 유효하지 않습니다.")
-    private LocalDateTime postedAt;
 
     private String photoPath;
 }
