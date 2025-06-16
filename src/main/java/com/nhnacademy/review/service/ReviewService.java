@@ -21,6 +21,7 @@ import java.util.List;
 public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ObjectMapper objectMapper;
+    private final MinioService minioService;
 
     public List<ReviewResponse> getReviewsByBookId(Long bookId) {
         List<ReviewResponse> reviewResponseList = new ArrayList<>();
@@ -44,11 +45,16 @@ public class ReviewService {
     }
 
     @Transactional
-    public ReviewResponse updateReview(Long id, ReviewUpdateRequest reviewUpdateRequest, Long userId) {
+    public ReviewResponse updateReview(Long id, ReviewUpdateRequest reviewUpdateRequest, Long userId) throws Exception {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException(id));
         if (!review.getUserId().equals(userId)) {
             throw new NotAuthorizedUserException(userId);
+        }
+        String oldPhotoPath = review.getPhotoPath();
+        String newPhotoPath = reviewUpdateRequest.getPhotoPath();
+        if (oldPhotoPath != null && !oldPhotoPath.equals(newPhotoPath)) {
+            minioService.deleteFile(oldPhotoPath);
         }
         review.update(reviewUpdateRequest);
         return objectMapper.convertValue(review, ReviewResponse.class);

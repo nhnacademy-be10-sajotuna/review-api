@@ -1,5 +1,6 @@
 server:
   port: 10368
+  max-http-request-header-size: 32KB
 
 spring:
   application:
@@ -26,6 +27,12 @@ eureka:
     prefer-ip-address: true
     instance-id: ${spring.application.name}:${server.port}
 
+minio:
+  url: http://storage.java21.net:8000/
+  accessKey: 49CWHX5eDpHYcKGTKltz
+  secretKey: s1PNRymGqELYt7tThtqNvVbQaXwwP2ilLecLG7w2
+  bucket: sajotuna-review
+
 management:
   endpoints:
     web:
@@ -34,5 +41,6 @@ management:
 
 logging:
   level:
-    org.springframework.cloud.gateway: DEBUG
-    reactor.netty.http.client: DEBUG
+    com.netflix.discovery: off
+    com.netflix.eureka: off
+    org.springframework.cloud.netflix.eureka: off
