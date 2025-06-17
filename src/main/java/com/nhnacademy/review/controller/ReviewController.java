@@ -32,12 +32,7 @@ public class ReviewController {
             @RequestParam(value = "file", required = false) MultipartFile file,
             @RequestHeader("X-User-Id") Long userId) throws Exception {
 
-        if (file != null && !file.isEmpty()) {
-            String photoPath = minioService.uploadFile(file);
-            request.setPhotoPath(photoPath);
-        }
-
-        ReviewResponse created = reviewService.createReview(request, userId);
+        ReviewResponse created = reviewService.createReview(request, userId, file);
         return ResponseEntity.ok(created);
     }
 
@@ -49,12 +44,7 @@ public class ReviewController {
             @RequestParam(value = "file", required = false) MultipartFile file,
             @RequestHeader("X-User-Id") Long userId) throws Exception {
 
-        if (file != null && !file.isEmpty()) {
-            String photoPath = minioService.uploadFile(file);
-            request.setPhotoPath(photoPath);
-        }
-
-        ReviewResponse updated = reviewService.updateReview(id, request, userId);
+        ReviewResponse updated = reviewService.updateReview(id, request, userId, file);
         return ResponseEntity.ok(updated);
     }
 

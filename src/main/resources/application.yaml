@@ -20,7 +20,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:10372/eureka/
+      defaultZone: http://10.116.64.11:10372/eureka/
     healthcheck:
       enabled: true
   instance:
@@ -38,9 +38,9 @@ management:
     web:
       exposure:
         include: health,info,shutdown
-
-logging:
-  level:
-    com.netflix.discovery: off
-    com.netflix.eureka: off
-    org.springframework.cloud.netflix.eureka: off
+#
+#logging:
+#  level:
+#    com.netflix.discovery: off
+#    com.netflix.eureka: off
+#    org.springframework.cloud.netflix.eureka: off
