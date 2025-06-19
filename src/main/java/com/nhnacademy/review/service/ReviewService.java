@@ -25,6 +25,7 @@ public class ReviewService {
     private final ObjectMapper objectMapper;
     private final MinioService minioService;
     private final PointFeignClient pointFeignClient;
+//    private final ReviewRabbitService reviewRabbitService;
 
     public List<ReviewResponse> getReviewsByBookId(Long bookId) {
         List<ReviewResponse> reviewResponseList = new ArrayList<>();
@@ -43,11 +44,13 @@ public class ReviewService {
         }
 
         if (file != null && !file.isEmpty()) {
+//            reviewRabbitService.sendPointEarnMessage(new PointEarnRequest(userId, 0, PointPolicyType.REVIEW_WITH_IMAGE));
             pointFeignClient.earnPointsByType(userId, "REVIEW_WITH_IMAGE");
             String photoPath = minioService.uploadFile(file);
             reviewCreateRequest.setPhotoPath(photoPath);
         } else {
-            pointFeignClient.earnPointsByType(userId,"REVIEW");
+//            reviewRabbitService.sendPointEarnMessage(new PointEarnRequest(userId, 0, PointPolicyType.REVIEW));
+            pointFeignClient.earnPointsByType(userId, "REVIEW");
         }
 
         Review review = objectMapper.convertValue(reviewCreateRequest, Review.class);
