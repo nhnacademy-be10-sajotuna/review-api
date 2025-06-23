@@ -19,11 +19,10 @@ import java.util.List;
 @RequestMapping("/api/reviews")
 public class ReviewController {
     private final ReviewService reviewService;
-    private final MinioService minioService;
 
-    @GetMapping("/books/{bookId}")
-    public ResponseEntity<List<ReviewResponse>> getReviewsByBook(@PathVariable Long bookId) {
-        List<ReviewResponse> reviews = reviewService.getReviewsByBookId(bookId);
+    @GetMapping("/books/{isbn}")
+    public ResponseEntity<List<ReviewResponse>> getReviewsByBook(@PathVariable String isbn) {
+        List<ReviewResponse> reviews = reviewService.getReviewsByBookId(isbn);
         return ResponseEntity.ok(reviews);
     }
 

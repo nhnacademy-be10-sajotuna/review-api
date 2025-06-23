@@ -28,9 +28,9 @@ public class ReviewService {
     private final MinioService minioService;
     private final PointMessageProducer pointMessageProducer;
 
-    public List<ReviewResponse> getReviewsByBookId(Long bookId) {
+    public List<ReviewResponse> getReviewsByBookId(String isbn) {
         List<ReviewResponse> reviewResponseList = new ArrayList<>();
-        List<Review> reviews = reviewRepository.findByBookId(bookId);
+        List<Review> reviews = reviewRepository.findByIsbn(isbn);
         for (Review review : reviews) {
             ReviewResponse response = objectMapper.convertValue(review, ReviewResponse.class);
             reviewResponseList.add(response);
@@ -48,8 +48,8 @@ public class ReviewService {
 
     @Transactional
     public ReviewResponse createReview(ReviewCreateRequest reviewCreateRequest, Long userId, MultipartFile file) throws Exception {
-        if (reviewRepository.findByBookIdAndUserId(reviewCreateRequest.getBookId(), userId).isPresent()) {
-            throw new ReviewAlreadyExistsException(reviewCreateRequest.getBookId());
+        if (reviewRepository.findByIsbnAndUserId(reviewCreateRequest.getIsbn(), userId).isPresent()) {
+            throw new ReviewAlreadyExistsException(reviewCreateRequest.getIsbn());
         }
 
         if (file != null && !file.isEmpty()) {
