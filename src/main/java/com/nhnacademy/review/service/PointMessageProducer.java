@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 public class PointMessageProducer {
     private final RabbitTemplate rabbitTemplate;
 
-    @Value("${rabbitmq.exchange.name}")
+    @Value("${rabbitmq.point.exchange}")
     private String exchangeName;
 
-    @Value("${rabbitmq.routing.key}")
+    @Value("${rabbitmq.point.routing-key}")
     private String routingKey;
 
     public PointMessageProducer(RabbitTemplate rabbitTemplate) {
