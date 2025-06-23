@@ -24,8 +24,8 @@ public class Review {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(name = "book_id", nullable = false)
-    private Long bookId;
+    @Column(nullable = false)
+    private String isbn;
 
     @Column(name = "rating", nullable = false)
     private int rating;

@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class ReviewResponse {
     private Long id;
     private Long userId;
-    private Long bookId;
+    private String isbn;
     private int rating;
     private String content;
     private LocalDateTime postedAt;

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReviewCreateRequest {
     @NotNull(message = "책 ID가 유효하지 않습니다.")
-    private Long bookId;
+    private String isbn;
 
     @Min(value = 1, message = "평가 점수는 1점부터 5점까지입니다.")
     @Max(value = 5, message = "평가 점수는 1점부터 5점까지입니다.")
