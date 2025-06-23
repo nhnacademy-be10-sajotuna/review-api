@@ -45,14 +45,12 @@ public class ReviewService {
         }
 
         if (file != null && !file.isEmpty()) {
-//            pointFeignClient.earnPointsByType(userId, "REVIEW_WITH_IMAGE");
             pointMessageProducer.sendPointEarnRequest(
                     new PointEarnRequest(userId, 0, PointPolicyType.REVIEW_WITH_IMAGE)
             );
             String photoPath = minioService.uploadFile(file);
             reviewCreateRequest.setPhotoPath(photoPath);
         } else {
-//            pointFeignClient.earnPointsByType(userId, "REVIEW");
             pointMessageProducer.sendPointEarnRequest(
                     new PointEarnRequest(userId, 0, PointPolicyType.REVIEW)
             );
