@@ -40,14 +40,6 @@ public class ReviewService {
         return reviewResponseList;
     }
 
-    public List<ReviewStatsResponse> getBooksByAverageRatingDescWithMinReviews(int minReviewCount) {
-        return reviewRepository.findBooksByAverageRatingDescWithMinReviews(minReviewCount);
-    }
-
-    public List<ReviewStatsResponse> getBooksByReviewCountDesc() {
-        return reviewRepository.findBooksByReviewCountDesc();
-    }
-
     @Transactional
     public ReviewResponse createReview(ReviewCreateRequest reviewCreateRequest, Long userId, MultipartFile file) throws Exception {
         if (reviewRepository.findByIsbnAndUserId(reviewCreateRequest.getIsbn(), userId).isPresent()) {
