@@ -3,6 +3,7 @@ package com.nhnacademy.review.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.review.domain.dto.ReviewCreateRequest;
 import com.nhnacademy.review.domain.dto.ReviewResponse;
+import com.nhnacademy.review.domain.dto.ReviewStatsResponse;
 import com.nhnacademy.review.domain.dto.ReviewUpdateRequest;
 import com.nhnacademy.review.domain.entity.Review;
 import com.nhnacademy.review.exception.NotAuthorizedUserException;
@@ -26,7 +27,6 @@ public class ReviewService {
     private final ObjectMapper objectMapper;
     private final MinioService minioService;
     private final PointMessageProducer pointMessageProducer;
-//    private final PointFeignClient pointFeignClient;
 
     public List<ReviewResponse> getReviewsByBookId(Long bookId) {
         List<ReviewResponse> reviewResponseList = new ArrayList<>();
@@ -36,6 +36,14 @@ public class ReviewService {
             reviewResponseList.add(response);
         }
         return reviewResponseList;
+    }
+
+    public List<ReviewStatsResponse> getBooksByAverageRatingDescWithMinReviews(int minReviewCount) {
+        return reviewRepository.findBooksByAverageRatingDescWithMinReviews(minReviewCount);
+    }
+
+    public List<ReviewStatsResponse> getBooksByReviewCountDesc() {
+        return reviewRepository.findBooksByReviewCountDesc();
     }
 
     @Transactional
