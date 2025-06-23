@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.review.client.BookClient;
 import com.nhnacademy.review.domain.dto.ReviewCreateRequest;
 import com.nhnacademy.review.domain.dto.ReviewResponse;
-import com.nhnacademy.review.domain.dto.ReviewStatsResponse;
 import com.nhnacademy.review.domain.dto.ReviewUpdateRequest;
 import com.nhnacademy.review.domain.entity.Review;
 import com.nhnacademy.review.exception.NotAuthorizedUserException;
