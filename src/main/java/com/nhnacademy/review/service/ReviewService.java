@@ -1,6 +1,7 @@
 package com.nhnacademy.review.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.review.client.BookClient;
 import com.nhnacademy.review.domain.dto.ReviewCreateRequest;
 import com.nhnacademy.review.domain.dto.ReviewResponse;
 import com.nhnacademy.review.domain.dto.ReviewStatsResponse;
@@ -27,6 +28,7 @@ public class ReviewService {
     private final ObjectMapper objectMapper;
     private final MinioService minioService;
     private final PointMessageProducer pointMessageProducer;
+    private final BookClient bookClient;
 
     public List<ReviewResponse> getReviewsByBookId(String isbn) {
         List<ReviewResponse> reviewResponseList = new ArrayList<>();
@@ -67,6 +69,7 @@ public class ReviewService {
         Review review = objectMapper.convertValue(reviewCreateRequest, Review.class);
         review.setUserId(userId);
         Review savedReview = reviewRepository.save(review);
+        bookClient.notifyBookReviewCreated(reviewCreateRequest.getIsbn(), savedReview.getId());
         return objectMapper.convertValue(savedReview, ReviewResponse.class);
     }
 
