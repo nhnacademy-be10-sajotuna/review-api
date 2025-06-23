@@ -8,7 +8,8 @@ import com.nhnacademy.review.domain.entity.Review;
 import com.nhnacademy.review.exception.NotAuthorizedUserException;
 import com.nhnacademy.review.exception.ReviewAlreadyExistsException;
 import com.nhnacademy.review.exception.ReviewNotFoundException;
-import com.nhnacademy.review.point.PointFeignClient;
+import com.nhnacademy.review.point.PointEarnRequest;
+import com.nhnacademy.review.point.PointPolicyType;
 import com.nhnacademy.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,8 +25,8 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ObjectMapper objectMapper;
     private final MinioService minioService;
-    private final PointFeignClient pointFeignClient;
-//    private final ReviewRabbitService reviewRabbitService;
+    private final PointMessageProducer pointMessageProducer;
+//    private final PointFeignClient pointFeignClient;
 
     public List<ReviewResponse> getReviewsByBookId(Long bookId) {
         List<ReviewResponse> reviewResponseList = new ArrayList<>();
@@ -44,13 +45,17 @@ public class ReviewService {
         }
 
         if (file != null && !file.isEmpty()) {
-//            reviewRabbitService.sendPointEarnMessage(new PointEarnRequest(userId, 0, PointPolicyType.REVIEW_WITH_IMAGE));
-            pointFeignClient.earnPointsByType(userId, "REVIEW_WITH_IMAGE");
+//            pointFeignClient.earnPointsByType(userId, "REVIEW_WITH_IMAGE");
+            pointMessageProducer.sendPointEarnRequest(
+                    new PointEarnRequest(userId, 0, PointPolicyType.REVIEW_WITH_IMAGE)
+            );
             String photoPath = minioService.uploadFile(file);
             reviewCreateRequest.setPhotoPath(photoPath);
         } else {
-//            reviewRabbitService.sendPointEarnMessage(new PointEarnRequest(userId, 0, PointPolicyType.REVIEW));
-            pointFeignClient.earnPointsByType(userId, "REVIEW");
+//            pointFeignClient.earnPointsByType(userId, "REVIEW");
+            pointMessageProducer.sendPointEarnRequest(
+                    new PointEarnRequest(userId, 0, PointPolicyType.REVIEW)
+            );
         }
 
         Review review = objectMapper.convertValue(reviewCreateRequest, Review.class);
