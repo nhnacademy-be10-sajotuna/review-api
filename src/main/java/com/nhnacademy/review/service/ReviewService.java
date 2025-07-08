@@ -1,9 +1,9 @@
 package com.nhnacademy.review.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.review.client.BookClient;
 import com.nhnacademy.review.domain.dto.ReviewCreateRequest;
 import com.nhnacademy.review.domain.dto.ReviewResponse;
-import com.nhnacademy.review.domain.dto.ReviewStatsResponse;
 import com.nhnacademy.review.domain.dto.ReviewUpdateRequest;
 import com.nhnacademy.review.domain.entity.Review;
 import com.nhnacademy.review.exception.NotAuthorizedUserException;
@@ -25,6 +25,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ObjectMapper objectMapper;
     private final PointMessageProducer pointMessageProducer;
+    private final BookClient bookClient;
 
     public List<ReviewResponse> getReviewsByIsbn(String isbn) {
         List<ReviewResponse> reviewResponseList = new ArrayList<>();
@@ -34,14 +35,6 @@ public class ReviewService {
             reviewResponseList.add(response);
         }
         return reviewResponseList;
-    }
-
-    public List<ReviewStatsResponse> getBooksByAverageRatingDescWithMinReviews(int minReviewCount) {
-        return reviewRepository.findBooksByAverageRatingDescWithMinReviews(minReviewCount);
-    }
-
-    public List<ReviewStatsResponse> getBooksByReviewCountDesc() {
-        return reviewRepository.findBooksByReviewCountDesc();
     }
 
     @Transactional
@@ -64,6 +57,7 @@ public class ReviewService {
         Review review = objectMapper.convertValue(reviewCreateRequest, Review.class);
         review.setUserId(userId);
         Review savedReview = reviewRepository.save(review);
+        bookClient.notifyBookReviewCreated(reviewCreateRequest.getIsbn(), savedReview.getId());
         return objectMapper.convertValue(savedReview, ReviewResponse.class);
     }
 
