@@ -2,7 +2,6 @@ package com.nhnacademy.review.controller;
 
 import com.nhnacademy.review.domain.dto.ReviewCreateRequest;
 import com.nhnacademy.review.domain.dto.ReviewResponse;
-import com.nhnacademy.review.domain.dto.ReviewStatsResponse;
 import com.nhnacademy.review.domain.dto.ReviewUpdateRequest;
 import com.nhnacademy.review.service.ReviewService;
 import jakarta.validation.Valid;
@@ -22,21 +21,6 @@ public class ReviewController {
     public ResponseEntity<List<ReviewResponse>> getReviewsByBook(@PathVariable String isbn) {
         List<ReviewResponse> reviews = reviewService.getReviewsByIsbn(isbn);
         return ResponseEntity.ok(reviews);
-    }
-
-    // 최소 100건 이상, 평점평균 내림차순
-    @GetMapping("/books/average-rating")
-    public ResponseEntity<List<ReviewStatsResponse>> getBooksByAverageRatingDesc(
-            @RequestParam(defaultValue = "100") int minReviewCount) {
-        List<ReviewStatsResponse> result = reviewService.getBooksByAverageRatingDescWithMinReviews(minReviewCount);
-        return ResponseEntity.ok(result);
-    }
-
-    // 리뷰 수 내림차순
-    @GetMapping("/books/review-count")
-    public ResponseEntity<List<ReviewStatsResponse>> getBooksByReviewCountDesc() {
-        List<ReviewStatsResponse> result = reviewService.getBooksByReviewCountDesc();
-        return ResponseEntity.ok(result);
     }
 
     @PostMapping
