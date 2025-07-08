@@ -24,8 +24,8 @@ public class Review {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(name = "book_id", nullable = false)
-    private Long bookId;
+    @Column(name = "isbn", nullable = false)
+    private String isbn;
 
     @Column(name = "rating", nullable = false)
     private int rating;
@@ -38,11 +38,11 @@ public class Review {
     private LocalDateTime postedAt;
 
     @Column(name = "photo_path")
-    private String photoPath;
+    private String filePath;
 
     public void update(ReviewUpdateRequest reviewCreateRequest) {
         this.rating = reviewCreateRequest.getRating();
         this.content = reviewCreateRequest.getContent();
-        this.photoPath = reviewCreateRequest.getPhotoPath();
+        this.filePath = reviewCreateRequest.getFilePath();
     }
 }

@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ReviewStatsResponse {
-    private Long bookId;
+    private String isbn;
     private Double averageRating;
     private Long reviewCount;
 }
