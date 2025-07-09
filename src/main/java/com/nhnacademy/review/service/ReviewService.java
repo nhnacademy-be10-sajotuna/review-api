@@ -38,10 +38,12 @@ public class ReviewService {
     }
 
     @Transactional
-    public ReviewResponse createReview(ReviewCreateRequest reviewCreateRequest, Long userId, String filePath) throws Exception {
+    public ReviewResponse createReview(ReviewCreateRequest reviewCreateRequest, Long userId) throws Exception {
         if (reviewRepository.findByIsbnAndUserId(reviewCreateRequest.getIsbn(), userId).isPresent()) {
             throw new ReviewAlreadyExistsException(reviewCreateRequest.getIsbn());
         }
+
+        String filePath = reviewCreateRequest.getFilePath();
 
         if (filePath != null && !filePath.isEmpty()) {
             pointMessageProducer.sendPointEarnRequest(
@@ -62,13 +64,15 @@ public class ReviewService {
     }
 
     @Transactional
-    public ReviewResponse updateReview(Long id, ReviewUpdateRequest reviewUpdateRequest, Long userId, String filePath) throws Exception {
+    public ReviewResponse updateReview(Long id, ReviewUpdateRequest reviewUpdateRequest, Long userId) throws Exception {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException(id));
 
         if (!review.getUserId().equals(userId)) {
             throw new NotAuthorizedUserException(userId);
         }
+
+        String filePath = reviewUpdateRequest.getFilePath();
 
         if (filePath != null && !filePath.isEmpty()) {
             reviewUpdateRequest.setFilePath(filePath);

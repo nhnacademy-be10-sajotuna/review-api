@@ -26,10 +26,9 @@ public class ReviewController {
     @PostMapping
     public ResponseEntity<ReviewResponse> createReview(
             @Valid @ModelAttribute ReviewCreateRequest request,
-            @RequestParam(value = "filePath", required = false) String filePath,
             @RequestHeader("X-User-Id") Long userId) throws Exception {
 
-        ReviewResponse created = reviewService.createReview(request, userId, filePath);
+        ReviewResponse created = reviewService.createReview(request, userId);
         return ResponseEntity.ok(created);
     }
 
@@ -37,10 +36,9 @@ public class ReviewController {
     public ResponseEntity<ReviewResponse> updateReview(
             @PathVariable Long id,
             @Valid @ModelAttribute ReviewUpdateRequest request,
-            @RequestParam(value = "filePath", required = false) String filePath,
             @RequestHeader("X-User-Id") Long userId) throws Exception {
 
-        ReviewResponse updated = reviewService.updateReview(id, request, userId, filePath);
+        ReviewResponse updated = reviewService.updateReview(id, request, userId);
         return ResponseEntity.ok(updated);
     }
 
