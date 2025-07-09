@@ -33,8 +33,7 @@ public class Review {
     @Column(name = "rating", nullable = false)
     private int rating;
 
-    @Column(name = "content", nullable = false)
-    @Lob
+    @Column(columnDefinition = "TEXT", name = "content", nullable = false)
     private String content;
 
     @CreationTimestamp
