@@ -24,13 +24,16 @@ public class Review {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(nullable = false)
+    @Column(name = "masked_email", nullable = false)
+    private String maskedEmail;
+
+    @Column(name = "isbn", nullable = false)
     private String isbn;
 
     @Column(name = "rating", nullable = false)
     private int rating;
 
-    @Column(name = "content", nullable = false)
+    @Column(columnDefinition = "TEXT", name = "content", nullable = false)
     private String content;
 
     @CreationTimestamp
@@ -38,11 +41,11 @@ public class Review {
     private LocalDateTime postedAt;
 
     @Column(name = "photo_path")
-    private String photoPath;
+    private String filePath;
 
     public void update(ReviewUpdateRequest reviewCreateRequest) {
         this.rating = reviewCreateRequest.getRating();
         this.content = reviewCreateRequest.getContent();
-        this.photoPath = reviewCreateRequest.getPhotoPath();
+        this.filePath = reviewCreateRequest.getFilePath();
     }
 }

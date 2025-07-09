@@ -7,6 +7,5 @@ import lombok.Getter;
 @Getter
 public class PointEarnRequest {
     private Long userId;
-    private int totalPrice;
     private PointPolicyType type;
 }

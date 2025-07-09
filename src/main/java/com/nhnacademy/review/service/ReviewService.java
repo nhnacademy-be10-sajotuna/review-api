@@ -15,7 +15,6 @@ import com.nhnacademy.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +24,10 @@ import java.util.List;
 public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ObjectMapper objectMapper;
-    private final MinioService minioService;
     private final PointMessageProducer pointMessageProducer;
     private final BookClient bookClient;
 
-    public List<ReviewResponse> getReviewsByBookId(String isbn) {
+    public List<ReviewResponse> getReviewsByIsbn(String isbn) {
         List<ReviewResponse> reviewResponseList = new ArrayList<>();
         List<Review> reviews = reviewRepository.findByIsbn(isbn);
         for (Review review : reviews) {
@@ -40,20 +38,21 @@ public class ReviewService {
     }
 
     @Transactional
-    public ReviewResponse createReview(ReviewCreateRequest reviewCreateRequest, Long userId, MultipartFile file) throws Exception {
+    public ReviewResponse createReview(ReviewCreateRequest reviewCreateRequest, Long userId) throws Exception {
         if (reviewRepository.findByIsbnAndUserId(reviewCreateRequest.getIsbn(), userId).isPresent()) {
             throw new ReviewAlreadyExistsException(reviewCreateRequest.getIsbn());
         }
 
-        if (file != null && !file.isEmpty()) {
+        String filePath = reviewCreateRequest.getFilePath();
+
+        if (filePath != null && !filePath.isEmpty()) {
             pointMessageProducer.sendPointEarnRequest(
-                    new PointEarnRequest(userId, 0, PointPolicyType.REVIEW_WITH_IMAGE)
+                    new PointEarnRequest(userId, PointPolicyType.REVIEW_WITH_IMAGE)
             );
-            String photoPath = minioService.uploadFile(file);
-            reviewCreateRequest.setPhotoPath(photoPath);
+            reviewCreateRequest.setFilePath(filePath);
         } else {
             pointMessageProducer.sendPointEarnRequest(
-                    new PointEarnRequest(userId, 0, PointPolicyType.REVIEW)
+                    new PointEarnRequest(userId, PointPolicyType.REVIEW)
             );
         }
 
@@ -65,7 +64,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public ReviewResponse updateReview(Long id, ReviewUpdateRequest reviewUpdateRequest, Long userId, MultipartFile file) throws Exception {
+    public ReviewResponse updateReview(Long id, ReviewUpdateRequest reviewUpdateRequest, Long userId) throws Exception {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException(id));
 
@@ -73,19 +72,19 @@ public class ReviewService {
             throw new NotAuthorizedUserException(userId);
         }
 
-        if (file != null && !file.isEmpty()) {
-            String photoPath = minioService.uploadFile(file);
-            reviewUpdateRequest.setPhotoPath(photoPath);
-        }
+        String filePath = reviewUpdateRequest.getFilePath();
 
-        String oldPhotoPath = review.getPhotoPath();
-        String newPhotoPath = reviewUpdateRequest.getPhotoPath();
-
-        if (oldPhotoPath != null && !oldPhotoPath.equals(newPhotoPath)) {
-            minioService.deleteFile(oldPhotoPath);
+        if (filePath != null && !filePath.isEmpty()) {
+            reviewUpdateRequest.setFilePath(filePath);
         }
 
         review.update(reviewUpdateRequest);
+        return objectMapper.convertValue(review, ReviewResponse.class);
+    }
+
+    public ReviewResponse getReviewById(Long id) {
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(() -> new ReviewNotFoundException(id));
         return objectMapper.convertValue(review, ReviewResponse.class);
     }
 }

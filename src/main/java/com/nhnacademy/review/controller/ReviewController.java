@@ -8,7 +8,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,17 +19,16 @@ public class ReviewController {
 
     @GetMapping("/books/{isbn}")
     public ResponseEntity<List<ReviewResponse>> getReviewsByBook(@PathVariable String isbn) {
-        List<ReviewResponse> reviews = reviewService.getReviewsByBookId(isbn);
+        List<ReviewResponse> reviews = reviewService.getReviewsByIsbn(isbn);
         return ResponseEntity.ok(reviews);
     }
 
     @PostMapping
     public ResponseEntity<ReviewResponse> createReview(
             @Valid @ModelAttribute ReviewCreateRequest request,
-            @RequestParam(value = "file", required = false) MultipartFile file,
             @RequestHeader("X-User-Id") Long userId) throws Exception {
 
-        ReviewResponse created = reviewService.createReview(request, userId, file);
+        ReviewResponse created = reviewService.createReview(request, userId);
         return ResponseEntity.ok(created);
     }
 
@@ -38,11 +36,15 @@ public class ReviewController {
     public ResponseEntity<ReviewResponse> updateReview(
             @PathVariable Long id,
             @Valid @ModelAttribute ReviewUpdateRequest request,
-            @RequestParam(value = "file", required = false) MultipartFile file,
             @RequestHeader("X-User-Id") Long userId) throws Exception {
 
-        ReviewResponse updated = reviewService.updateReview(id, request, userId, file);
+        ReviewResponse updated = reviewService.updateReview(id, request, userId);
         return ResponseEntity.ok(updated);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ReviewResponse> getReviewById(@PathVariable("id") Long id) {
+        ReviewResponse review = reviewService.getReviewById(id);
+        return ResponseEntity.ok(review);
+    }
 }
