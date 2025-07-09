@@ -24,6 +24,9 @@ public class Review {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
+    @Column(name = "masked_email", nullable = false)
+    private String maskedEmail;
+
     @Column(name = "isbn", nullable = false)
     private String isbn;
 
@@ -31,6 +34,7 @@ public class Review {
     private int rating;
 
     @Column(name = "content", nullable = false)
+    @Lob
     private String content;
 
     @CreationTimestamp

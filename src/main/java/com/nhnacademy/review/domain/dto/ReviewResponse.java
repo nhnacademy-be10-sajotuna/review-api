@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 public class ReviewResponse {
     private Long id;
     private Long userId;
+    private String maskedEmail;
     private String isbn;
     private int rating;
     private String content;
