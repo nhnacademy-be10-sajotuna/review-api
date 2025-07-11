@@ -37,6 +37,16 @@ public class ReviewService {
         return reviewResponseList;
     }
 
+    public List<ReviewResponse> getReviewByUserId(Long userId) {
+        List<ReviewResponse> reviewResponseList = new ArrayList<>();
+        List<Review> reviews = reviewRepository.findByUserId(userId);
+        for (Review review : reviews) {
+            ReviewResponse response = objectMapper.convertValue(review, ReviewResponse.class);
+            reviewResponseList.add(response);
+        }
+        return reviewResponseList;
+    }
+
     @Transactional
     public ReviewResponse createReview(ReviewCreateRequest reviewCreateRequest, Long userId) throws Exception {
         if (reviewRepository.findByIsbnAndUserId(reviewCreateRequest.getIsbn(), userId).isPresent()) {

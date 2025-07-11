@@ -17,9 +17,15 @@ import java.util.List;
 public class ReviewController {
     private final ReviewService reviewService;
 
-    @GetMapping("/books/{isbn}")
+    @GetMapping("/books/isbn/{isbn}")
     public ResponseEntity<List<ReviewResponse>> getReviewsByBook(@PathVariable String isbn) {
         List<ReviewResponse> reviews = reviewService.getReviewsByIsbn(isbn);
+        return ResponseEntity.ok(reviews);
+    }
+
+    @GetMapping("/books/user-id/{userId}")
+    public ResponseEntity<List<ReviewResponse>> getReviewsByUser(@PathVariable Long userId) {
+        List<ReviewResponse> reviews = reviewService.getReviewByUserId(userId);
         return ResponseEntity.ok(reviews);
     }
 
