@@ -8,5 +8,6 @@ import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findByIsbn(String isbn);
+    List<Review> findByUserId(Long userId);
     Optional<Review> findByIsbnAndUserId(String isbn, Long userId);
 }
