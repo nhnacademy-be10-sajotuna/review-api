@@ -11,6 +11,7 @@ public class ReviewResponse {
     private Long userId;
     private String maskedEmail;
     private String isbn;
+    private String bookTitle;
     private int rating;
     private String content;
     private LocalDateTime postedAt;

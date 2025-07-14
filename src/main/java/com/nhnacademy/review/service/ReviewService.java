@@ -37,7 +37,7 @@ public class ReviewService {
         return reviewResponseList;
     }
 
-    public List<ReviewResponse> getReviewByUserId(Long userId) {
+    public List<ReviewResponse> getReviewsByUserId(Long userId) {
         List<ReviewResponse> reviewResponseList = new ArrayList<>();
         List<Review> reviews = reviewRepository.findByUserId(userId);
         for (Review review : reviews) {

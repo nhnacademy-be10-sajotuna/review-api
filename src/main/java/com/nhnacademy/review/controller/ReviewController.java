@@ -25,7 +25,7 @@ public class ReviewController {
 
     @GetMapping("/books/user-id/{userId}")
     public ResponseEntity<List<ReviewResponse>> getReviewsByUser(@PathVariable Long userId) {
-        List<ReviewResponse> reviews = reviewService.getReviewByUserId(userId);
+        List<ReviewResponse> reviews = reviewService.getReviewsByUserId(userId);
         return ResponseEntity.ok(reviews);
     }
 

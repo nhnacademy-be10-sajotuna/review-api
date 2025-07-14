@@ -30,6 +30,9 @@ public class Review {
     @Column(name = "isbn", nullable = false)
     private String isbn;
 
+    @Column(name = "bookTitle", nullable = false)
+    private String bookTitle;
+
     @Column(name = "rating", nullable = false)
     private int rating;
 
