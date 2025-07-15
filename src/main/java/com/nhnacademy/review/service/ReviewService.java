@@ -69,7 +69,7 @@ public class ReviewService {
         Review review = objectMapper.convertValue(reviewCreateRequest, Review.class);
         review.setUserId(userId);
         Review savedReview = reviewRepository.save(review);
-        bookClient.notifyBookReviewCreated(reviewCreateRequest.getIsbn(), savedReview.getId());
+        bookClient.notifyBookReviewCreated(reviewCreateRequest.getIsbn(), savedReview.getRating());
         return objectMapper.convertValue(savedReview, ReviewResponse.class);
     }
 
