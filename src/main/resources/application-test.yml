@@ -1,0 +1,57 @@
+# src/test/resources/application.yml (테스트 환경 전용 설정)
+
+spring:
+  # 테스트 시에는 Cloud Config와 외부 설정 Import를 모두 비활성화합니다.
+  config:
+    import: ""
+  cloud:
+    config:
+      enabled: false
+
+  # 테스트용 데이터베이스로 인메모리 H2를 사용합니다.
+  # 이렇게 하면 실제 DB에 영향을 주지 않고, 빠르고 독립적인 테스트가 가능합니다.
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      # 매번 테스트 실행 시 스키마를 새로 생성하여 깨끗한 상태에서 시작합니다.
+      ddl-auto: create
+    properties:
+      hibernate:
+        # H2 데이터베이스에 맞는 Dialect 설정
+        dialect: org.hibernate.dialect.H2Dialect
+    # SQL 쿼리를 보기 원할 경우 주석 해제
+    # show-sql: true
+
+  # H2 데이터베이스 콘솔을 활성화하여 웹 브라우저에서 DB 상태를 확인할 수 있습니다. (디버깅 시 유용)
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  # 테스트 시에는 RabbitMQ 메시지 큐에 연결하지 않도록 비활성화합니다.
+  rabbitmq:
+    # 테스트 중에는 로컬호스트로 설정하여 실제 서버에 접속하지 않도록 합니다.
+    # 또는 spring.rabbitmq.listener.simple.auto-startup: false 등을 사용할 수 있습니다.
+    host: localhost
+
+rabbitmq:
+  point:
+    exchange: test.point.exchange
+    routing-key: test.point.earn
+
+# Eureka 클라이언트를 비활성화하여 서비스 디스커버리를 시도하지 않도록 합니다.
+eureka:
+  client:
+    enabled: false
+
+# Actuator 엔드포인트는 테스트에서 굳이 필요하지 않다면 비활성화해도 무방합니다.
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
